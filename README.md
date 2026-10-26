@@ -112,7 +112,7 @@ tools/       可选的导出/检查脚本
 ### 说明
 
 - 本仓库只包含项目的核心源码和文档。**建模参考图、截图、录像、成片、备份、第三方图片素材均未包含**。
-- 仓库当前公开供查看和下载；暂未附带开源许可证。如需复用、二次开发或合作，请先联系作者。
+- 仓库采用 **MIT 许可证**，可自由使用、修改和分发（保留版权声明）；欢迎二次开发和合作。
 - 项目仍在开发中，欢迎反馈和贡献。
 
 ---
@@ -222,5 +222,5 @@ Please keep the art direction consistent: hard-surface, angular heavy mech, roug
 ### Notes
 
 - This repository contains the core source and docs only. **Modeling reference images, screenshots, recordings, final renders, backups and third-party image assets are not included.**
-- The repository is public for viewing and download. No open-source license is included yet; please contact the author before reuse, derivative work or collaboration.
+- Released under the **MIT License**; you are free to use, modify and distribute it with the copyright notice. Collaboration and derivative work are welcome.
 - The project is still in development. Feedback and contributions are welcome.
