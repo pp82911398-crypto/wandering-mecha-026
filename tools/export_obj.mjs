@@ -1,0 +1,15 @@
+import * as THREE from 'three';
+import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
+import { buildHead } from '../headlab/head.js';
+import { writeFileSync } from 'fs';
+const mk = (name, c) => { const m = new THREE.MeshStandardMaterial({ color: c }); m.name = name; return m; };
+const mats = { clay: mk('clay', 0xf1efea), dark: mk('dark', 0x4a4844), eye: mk('eye', 0x9a968e), edge: new THREE.LineBasicMaterial() };
+const t0 = Date.now();
+const head = buildHead(mats);
+head.group.traverse(o => { if (o.isMesh && !o.name) o.name = 'detail'; });
+head.group.updateMatrixWorld(true);
+const obj = new OBJExporter().parse(head.group);
+const out = process.argv[2];
+writeFileSync(out, '# Jaeger head (fan design study) - built by two/three-view intersection from line drawings\n# units: helmet height = 4.0\n' + obj);
+let tris = 0; head.group.traverse(o => { if (o.isMesh) tris += o.geometry.attributes.position.count / 3; });
+console.log('parts', head.parts.length, 'tris', Math.round(tris), 'ms', Date.now() - t0, 'bytes', obj.length);

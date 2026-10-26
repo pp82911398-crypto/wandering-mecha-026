@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>穹顶机场 · 机甲 026</title>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+  "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.8.3/build/index.module.js",
+  "three-bvh-csg": "https://cdn.jsdelivr.net/npm/three-bvh-csg@0.0.17/build/index.module.js"
+} }
+</script>
+<style>
+html,body{height:100%;margin:0;overflow:hidden;background:#0b111b;color:#e7edf1;font-family:"Noto Sans SC","PingFang SC",sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#loader{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0b111b;font:11px/1 "JetBrains Mono",monospace;letter-spacing:.14em;color:#8ea3af;transition:opacity .6s}
+#loader.hide{opacity:0;pointer-events:none}
+#loader b{color:#f4f1ea;font:700 15px "Noto Sans SC",sans-serif;letter-spacing:.2em}
+#loader .bar{width:200px;height:2px;background:rgba(255,255,255,.12)}#loader .bar i{display:block;height:100%;width:0;background:#ffab3d;transition:width .3s}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="loader"><b>穹顶机场 · 机甲 026</b><span id="ltext">准备中…</span><div class="bar"><i id="lbar"></i></div></div>
+<script type="module" src="./main.js?v=dome-head-shadow-20261023n"></script>
+<script type="module" src="../portstorm/freecam.js?v=dome-freecam-speed-20261023a"></script>
+<script src="../scenenav.js" data-current="dome"></script>
+<script type="module">if (new URLSearchParams(location.search).has('director')) import('./director.js?v=20261023a');</script>
+</body>
+</html>

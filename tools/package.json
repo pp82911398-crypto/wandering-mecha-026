@@ -1,0 +1,1 @@
+{"type":"module","dependencies":{"three":"^0.169.0","three-bvh-csg":"^0.0.17","three-mesh-bvh":"^0.8.3"}}

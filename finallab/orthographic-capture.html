@@ -1,0 +1,46 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>026 · 工程黄标准四视图</title>
+<style>body{margin:0;background:#dce1e4;font:14px system-ui;color:#28333c}header{padding:14px 20px;background:#edf0f2}#sheet{display:block;width:min(100%,1200px);height:auto;margin:auto}#exports{display:flex;gap:16px;padding:12px 20px;flex-wrap:wrap}iframe{position:fixed;width:4px;height:4px;opacity:.01;pointer-events:none;left:-10px;top:-10px}</style>
+<header><b>机甲 026 · 工程黄 · 标准四视图</b><span id="status">　正在加载成品间…</span></header>
+<div id="exports"></div><canvas id="sheet" width="4096" height="4096"></canvas>
+<iframe id="studio" src="./?scheme=hazard&view=front&spin=0"></iframe>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const status=document.getElementById('status'), frame=document.getElementById('studio');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+let fin;
+for(let i=0;i<240;i++){try{fin=frame.contentWindow.__fin;}catch{}if(fin)break;await wait(250);}
+if(!fin)throw new Error('成品间加载未完成');
+await wait(350);status.textContent='　正在渲染同尺度正交视图…';
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xe7ebed);scene.environment=fin.scene.environment;scene.environmentIntensity=.9;
+const robot=fin.mech.clone(true);scene.add(robot);scene.updateMatrixWorld(true);
+const bounds=new THREE.Box3().setFromObject(robot),centre=bounds.getCenter(new THREE.Vector3()),size=bounds.getSize(new THREE.Vector3());
+const half=Math.max(size.y*1.12,Math.max(size.x,size.z)*1.12)/2;
+const camera=new THREE.OrthographicCamera(-half,half,half,-half,.1,500);
+const ambient=new THREE.HemisphereLight(0xffffff,0x7b8892,2.0);scene.add(ambient);
+const key=new THREE.DirectionalLight(0xfff6e8,3.0),fill=new THREE.DirectionalLight(0xe1edff,1.5),rim=new THREE.DirectionalLight(0xffffff,1.4);
+scene.add(key,fill,rim,key.target,fill.target,rim.target);
+for(const light of [key,fill,rim])light.target.position.copy(centre);
+const renderer=fin.renderer;renderer.setPixelRatio(1);renderer.setSize(2048,2048,false);renderer.shadowMap.enabled=false;renderer.toneMappingExposure=1.0;
+const sheet=document.getElementById('sheet'),ctx=sheet.getContext('2d');ctx.fillStyle='#e7ebed';ctx.fillRect(0,0,4096,4096);
+const views=[['front','正面 / FRONT',new THREE.Vector3(0,0,1)],['back','背面 / BACK',new THREE.Vector3(0,0,-1)],['left','左侧 / LEFT',new THREE.Vector3(-1,0,0)],['right','右侧 / RIGHT',new THREE.Vector3(1,0,0)]];
+const exports=document.getElementById('exports');
+function link(id,text,url){const a=document.createElement('a');a.id=id;a.textContent=text;a.href=url;a.download=id+'.png';exports.append(a);}
+for(let i=0;i<views.length;i++){
+ const [name,label,axis]=views[i];camera.position.copy(centre).addScaledVector(axis,100);camera.up.set(0,1,0);camera.lookAt(centre);camera.updateMatrixWorld(true);
+ const right=new THREE.Vector3().crossVectors(camera.getWorldDirection(new THREE.Vector3()),new THREE.Vector3(0,1,0)).normalize();
+ key.position.copy(centre).addScaledVector(axis,40).addScaledVector(right,22).add(new THREE.Vector3(0,45,0));
+ fill.position.copy(centre).addScaledVector(axis,25).addScaledVector(right,-35).add(new THREE.Vector3(0,12,0));
+ rim.position.copy(centre).addScaledVector(axis,-35).add(new THREE.Vector3(0,30,0));
+ renderer.render(scene,camera);
+ const url=renderer.domElement.toDataURL('image/png');link('view-'+name,label+' 单图',url);
+ ctx.drawImage(renderer.domElement,(i%2)*2048,Math.floor(i/2)*2048);
+ ctx.fillStyle='#42515b';ctx.font='600 38px sans-serif';ctx.textAlign='center';ctx.fillText(label,(i%2)*2048+1024,Math.floor(i/2)*2048+2008);
+}
+ctx.strokeStyle='#b7c1c7';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(2048,0);ctx.lineTo(2048,4096);ctx.moveTo(0,2048);ctx.lineTo(4096,2048);ctx.stroke();
+link('sheetExport','下载四视图拼图 · 4096 × 4096',sheet.toDataURL('image/png'));
+document.body.dataset.ready='true';document.body.dataset.geometry=JSON.stringify({height:size.y,width:size.x,depth:size.z,orthographicSpan:half*2,scheme:'hazard'});
+status.textContent='　完成 · 正面 / 背面 / 左侧 / 右侧 · 同尺度正交';
+// The four images are complete; release the animated studio and its WebGL context.
+frame.remove();
+</script></html>

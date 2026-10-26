@@ -1,0 +1,10 @@
+node_modules/
+.npm-cache/
+__pycache__/
+.DS_Store
+*.log
+recordings/
+成片/
+备份/
+*.zip
+*.obj
